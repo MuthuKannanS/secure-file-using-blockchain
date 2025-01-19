@@ -1,0 +1,197 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'comment/vendor/bootstrap/four/css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'comment/vendor/bootstrap/three/css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'comment/css/comment.css' %}">
+    
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <a class="navbar-brand" href="#"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="true" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#"><span class="sr-only">(current)</span></a>
+      </li>
+      <h1 class="text-primary">Wellcome <i> {{ username }}.....!</i> </h1>
+    </ul>
+  </div>
+</nav>
+<body id="bg" style="background-image: url('{% static "comment/images/3.jpg"%}');background-repeat:no-repeat;background-attachment: fixed; background-size:100% 100%;">
+
+<div class="col-md-10 col-sm-4 col-xs-4" style="padding-top: 60px">
+<div id="content" class="p-8 p-md-5 pt-5">
+    <div class="col-md-12 col-sm-12 col-xs-10">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+					<a  class="btn btn-sm btn-success" onClick="ShowHome()" style="padding: 8px; float: right; background-color: Orange; color: white;">Home</a>&nbsp;
+                    <a  class="btn btn-sm btn-success" onClick="ShowDiv1()" style="padding: 8px; float: right; background-color: green; color: white;">Upload</a>&nbsp;
+					<a  class="btn btn-sm btn-success" onClick="ShowDiv2()" style="padding: 8px; float: right; background-color: blue; color: white;">View File</a>&nbsp;
+					<a  class="btn btn-sm btn-success" onClick="ShowDiv3()" style="padding: 8px; float: right; background-color: black; color: white;">View requset</a>&nbsp;
+					<a  class="btn btn-sm btn-success" href="{% url 'logout' %}" style="padding: 8px; float: left; background-color: red; color: white;">Logout</a>
+                </li>
+            </ol>
+            <div id="name1" style="display:none;" class="card mb-3">
+                <div class="card-header text-primary">
+               <i class="fas fa-truck text-secondary"><b>Upload Your File</b></i>
+                </div>
+                <div class="card-body">
+        <form action="{% url 'upload' id%}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+			<div class="form-group">
+				<div class="row">
+					<div class="col"><input type="text" class="form-control" name="filename" placeholder="File name" required="required"></div>  
+				</div>          
+			</div>
+
+
+			 <div class="form-group">
+				<div class="row">
+
+				  <div class="col"><label>Choose FIle</label>
+						<input type="file" id="myFile" name="file" placeholder="Report Attachment" enctype="multipart/form-data"></div>
+				</div>          
+			</div>
+
+			<div class="form-group">
+				<button type="submit" class="btn btn-success btn-lg btn-block" >Add Now</button>
+			</div>
+		</form>
+
+                 
+
+        </div>
+    </div>
+	<div id="home" >
+		<div class="card mb-3">
+			<div class="card-header text-primary">
+				<i class="fas fa-truck text-secondary"><b>Block Chain</b></i>
+			</div>
+			<center>
+				<img src="{% static 'comment/images/blockchain.jpg'%}"height="300px" width="500px"/>
+			</center><br>
+			<p>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;◦Blockchain is a system of recording information in a way that makes it difficult or impossible to change, hack, or cheat the system. A blockchain is essentially a digital ledger of transactions that is duplicated and distributed across the entire network of computer systems on the blockchain.</p>
+			<p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;◦A blockchain collects information together in groups, known as blocks, that hold sets of information. Blocks have certain storage capacities and, when filled, are closed and linked to the previously filled block, forming a chain of data known as the blockchain.</p>
+			<p> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;◦A hash is a function that meets the encrypted demands needed to solve for a blockchain computation. Hashes are of a fixed length since it makes it nearly impossible to guess the length of the hash if someone was trying to crack the blockchain. The same data will always produce the same hashed value.</p>
+			<a  class="btn btn-sm btn-success" onClick="ShowDiv1()" style="padding: 8px; float: right; background-color: green; color: white;">Secure Your File</a>
+		</div>
+	</div>
+    <div id="name2" style="display:none;">
+		<div class="card mb-3">
+                <div class="card-header text-primary">
+               <i class="fas fa-truck text-secondary"><b>View Your Upoloded Files</b></i>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>File Name</th>
+                                <th>Hash Value</th>
+								<th>Date & Time</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                        {% if m %}
+                            {% for file in m %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ file.filename }}</td>
+                                    <td>{{ file.hash_value}}</td>
+									<td>{{ file.date_time}}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+	</div>
+	<div id="name3" style="display:none;">
+		<div class="card mb-3">
+                <div class="card-header text-primary">
+               <i class="fas fa-truck text-secondary"><b>View Request Files</b></i>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>File Name</th>
+                                <th>Receiver</th>
+								<th>Send</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                        {% if h %}
+                            {% for file in h %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ file.filename }}</td>
+                                    <td>{{ file.receiver_name}}</td>
+									<td><a class="btn btn-sm btn-warning" href="{% url 'send_email' name=file.filename id=id%}">Accept</a></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+	</div>
+  
+    <script type="text/javascript" src="{% static 'comment/js/jquery-2.1.3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'comment/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'comment/js/jquery.dataTables.js' %}"></script>
+    <script type="text/javascript" src="{% static 'comment/js/main.js' %}"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script>
+		{% for msg in messages %}
+			swal('{{msg}}')
+		{% endfor %}
+	</script>
+	<script>
+	function ShowHome(){
+	document.getElementById('home').style.display = 'block';
+	document.getElementById('name1').style.display = 'none';
+	document.getElementById('name2').style.display = 'none';
+	document.getElementById('name3').style.display = 'none';
+	}
+	function ShowDiv1(){
+	document.getElementById('name1').style.display = 'block';
+	document.getElementById('name2').style.display = 'none';
+	document.getElementById('name3').style.display = 'none';
+	document.getElementById('home').style.display = 'none';
+	}
+	function ShowDiv2(){
+	document.getElementById('name2').style.display = 'block';
+	document.getElementById('name1').style.display = 'none';
+	document.getElementById('name3').style.display = 'none';
+	document.getElementById('home').style.display = 'none';
+	}
+	function ShowDiv3(){
+	document.getElementById('name3').style.display = 'block';
+	document.getElementById('name1').style.display = 'none';
+	document.getElementById('name2').style.display = 'none';
+	document.getElementById('home').style.display = 'none';
+	}
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

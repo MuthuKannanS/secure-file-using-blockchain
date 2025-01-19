@@ -1,0 +1,174 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'comment/vendor/bootstrap/four/css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'comment/vendor/bootstrap/three/css/bootstrap.min.css' %}">
+
+<link rel="stylesheet" type="text/css" href="{% static 'comment/css/comment.css' %}">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <a class="navbar-brand" href="#"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="true" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#"><span class="sr-only">(current)</span></a>
+      </li>
+      <h1 class="text-primary">Wellcome <i> {{ username }}.....!</i> </h1>
+    </ul>
+  </div>
+</nav>
+<body id="bg" style="background-image: url('{% static "comment/images/3.jpg"%}');background-repeat:no-repeat;background-attachment: fixed; background-size:100% 100%;">
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
+
+
+
+<div class="col-md-10 col-sm-4 col-xs-4" style="padding-top: 60px">
+<div id="content" class="p-8 p-md-5 pt-5">
+    <div class="col-md-12 col-sm-12 col-xs-10">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+					<a  class="btn btn-sm btn-success" onClick="ShowDiv2()" style="padding: 8px; float: right; background-color: blue; color: white;">View Files</a>&nbsp;
+					<a  class="btn btn-sm btn-success" onClick="ShowDiv4()" style="padding: 8px; float: right; background-color: green; color: white;">Your request files</a>&nbsp;
+					<a  class="btn btn-sm btn-success" onClick="ShowDiv3()" style="padding: 8px; float: right; background-color: black; color: white;">Verify and Download</a>&nbsp;
+					<a  class="btn btn-sm btn-success" href="{% url 'logout' %}" style="padding: 8px; float: left; background-color: red; color: white;">Logout</a>
+                </li>
+            </ol>
+    <div id="name2">
+		<div class="card mb-3">
+                <div class="card-header text-primary">
+               <i class="fas fa-truck text-secondary"><b>View All Files</b></i>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+								<th>File Uploader Name</th>
+                                <th>File Name</th>
+								<th>Hash value</th>
+								<th>Date&Time </th>
+								<th>Request</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                        {% if m %}
+                            {% for n in m %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+									<td>{{ n.username }}</td>
+                                    <td>{{ n.filename }}</td>
+                                    <td>{{ n.hash_value}}</td>
+									<td>{{ n.date_time}}</td>
+									<td><a class="btn btn-sm btn-success" href="{% url 'request' id1=n.filename id=id%}">Send request</a></td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+	</div>
+	<div id="name4" style="display:none;">
+		<div class="card mb-3">
+                <div class="card-header text-primary">
+               <i class="fas fa-truck text-secondary"><b>Your request files</b></i>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+								<th>File Uploader Name</th>
+                                <th>File Name</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                        {% if h %}
+                            {% for n in h %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+									<td>{{ n.uploader_name }}</td>
+                                    <td>{{ n.filename }}</td>
+								</tr>
+                            {% endfor %}
+                        {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+	</div>
+	<div id="name3" style="display:none;">
+		<div class="card mb-3">
+                <div class="card-header text-primary">
+               <i class="fas fa-truck text-secondary"><b>Verify and Download file</b></i>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <h1>Key verification System</h1>
+						<form action="{% url 'download' id1=id %}" method="post">
+							{% csrf_token %}
+							<label>File name:</label>
+							<input type="text" name="filename" placeholder="enter file name">
+							<label>Key</label>
+							<input type="text" name="key" placeholder="enter file key">
+							<input type="submit" name="submit" value="submit">
+						</form>
+                    </div>
+                </div>
+            </div>
+	</div>
+  
+    <script type="text/javascript" src="{% static 'comment/js/jquery-2.1.3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'comment/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'comment/js/jquery.dataTables.js' %}"></script>
+    <script type="text/javascript" src="{% static 'comment/js/main.js' %}"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script>
+		{% for msg in messages %}
+			swal('{{msg}}')
+		{% endfor %}
+	</script>
+	<script>
+	function ShowDiv4(){
+	document.getElementById('name4').style.display = 'block';
+	document.getElementById('name2').style.display = 'none';
+	document.getElementById('name3').style.display = 'none';
+	}
+	function ShowDiv2(){
+	document.getElementById('name2').style.display = 'block';
+	document.getElementById('name3').style.display = 'none';
+	document.getElementById('name4').style.display = 'none';
+	}
+	function ShowDiv3(){
+	document.getElementById('name3').style.display = 'block';
+	document.getElementById('name2').style.display = 'none';
+	document.getElementById('name4').style.display = 'none';
+	}
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
