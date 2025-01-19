@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy preserving blockchain</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <!------ Include the above in your HEAD tag ---------->
+</head>
+<body style="background-color:#34568B;">
+    <div class="wrapper fadeInDown">
+      <div id="formContent" style="background-color:#E15D44;">
+        <!-- Tabs Titles -->
+    
+        <!-- Icon -->
+        <div class="fadeIn first" style="padding: 20px;">
+        {% block title %}<b>Data Receiver Login</b>{% endblock %}
+        </div>
+        {% block button %}
+        <!-- Login Form -->
+        <form method="post" action="{% url 'login2' %}">
+            {% csrf_token %}
+          <input type="text" id="login" class="fadeIn second" name="username" placeholder="username" required>
+          <input type="text" id="password" class="fadeIn third" name="password" placeholder="password" required>
+         
+          <input type="submit" class="fadeIn fourth" value="Log In">
+          
+        </form>
+        {% endblock %}
+        <!-- Remind Passowrd -->
+        {% block contend %}
+        <div id="formFooter">
+          <a class="underlineHover" href="{% url 'register2' %}">Register here!</a>
+        </div>
+        {% endblock %}
+      </div>
+    </div>
+</body>
+</html>
